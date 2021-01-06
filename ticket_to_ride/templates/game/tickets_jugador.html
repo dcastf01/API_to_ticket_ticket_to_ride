@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+
+{% block header %}
+  <h1>{% block title %}Tickets{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('game.create', id=id,player=player) }}">More tickets</a>
+  {% endif %}
+{% endblock %}
+
+
+{% block content %}
+  {% for ticket_player in tickets_player     %}
+
+  {% endfor %}
+{% endblock %}
+

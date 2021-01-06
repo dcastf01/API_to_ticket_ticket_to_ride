@@ -3,6 +3,7 @@
 
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS player_tickets;
 
 
 
@@ -20,6 +21,19 @@ CREATE TABLE post (
   title TEXT NOT NULL,
   nplayers INTEGER NOT NULL,
   FOREIGN KEY (author_id) REFERENCES user (id)
+);
+
+CREATE TABLE player_tickets (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  game_id INTEGER NOT NULL,
+  author_id INTEGER NOT NULL,
+  player_id INTEGER NOT NULL,
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  origen TEXT NOT NULL,
+  destino TEXT NOT NULL,
+  puntos INTEGER NOT NULL,
+  FOREIGN KEY (game_id) REFERENCES user (id),
+  FOREIGN KEY (author_id) REFERENCES post (id)
 );
 
  

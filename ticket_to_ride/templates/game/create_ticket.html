@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Nuevos tickets{% endblock %}</h1>
+{% endblock %}
+
+
+
+{% block content %}
+  {% for ticket in tickets     %}
+  <article class="ticket">
+    <header>
+      
+        <h1>destino 1</h1>
+        <div class="about">Desde {{ ticket[0] }} hasta {{ ticket[1] }} por {{ticket[2]}} puntos </div>
+
+    </header>
+  </article>
+  {% endfor %}
+  <h1>destino 121312</h1>
+{% endblock %}

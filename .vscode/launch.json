@@ -5,7 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-
+            "name": "Python: Archivo actual",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: Flask",
             "type": "python",
             "request": "launch",
@@ -17,7 +23,6 @@
             },
             "args": [
                 "run",
-                
             ],
             "jinja": true
         }

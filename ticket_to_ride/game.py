@@ -9,46 +9,78 @@ from werkzeug.exceptions import abort
 
 from ticket_to_ride.auth import login_required
 from ticket_to_ride.db import get_db
+import logging
+import random
 
 bp = Blueprint("game", __name__)
 
 
-@bp.route("/<int:id>/jugador<int:player>/", methods=("GET", "POST"))
+@bp.route("/partida<int:id>/jugador<int:player>/", methods=("GET", "POST"))
 @login_required
 
-def test(id,player):
-    post=get_post(id)
+def player_ticket_menu(id,player):
+    """Show all the tickets, most recent first."""
     
-    return render_template("game/hola.html", post=post)
+    # tickets_player=get_tickets_players(id,player)
     
-def get_post(id, check_author=True):
-    """Get a post and its author by id.
+    db = get_db()
+    tickets_player = db.execute(
+        "SELECT p.id, origen, destino,puntos, created,game_id, author_id, username"
+        " FROM player_tickets p JOIN user u ON p.author_id = u.id"
+        " WHERE p.id = ? AND p.player_id= ?"
+        " ORDER BY created DESC",
+        (id,player)
+    ).fetchall()
+    
+    return render_template("game/tickets_jugador.html", tickets_player=tickets_player,id=id,player=player)
 
-    Checks that the id exists and optionally that the current user is
-    the author.
+def get_tickets_players(id,player)  :
 
-    :param id: id of post to get
-    :param check_author: require the current user to be the author
-    :return: the post with author information
-    :raise 404: if a post with the given id doesn't exist
-    :raise 403: if the current user isn't the author
-    """
-    post = (
-        get_db()
-        .execute(
-            "SELECT p.id, title, nplayers, created, author_id, username"
-            " FROM post p JOIN user u ON p.author_id = u.id"
-            " WHERE p.id = ?",
-            (id,),
-        )
-        .fetchone()
+    tickets_player=(
+            get_db()
+            .execute(
+                "SELECT p.id, origen, destino,puntos, created,game_id, author_id, username"
+                " FROM player_tickets p JOIN user u ON p.author_id = u.id"
+                " WHERE p.id = ? AND p.player_id= ?" ,
+                (id,player),
+            )
+            .fetchone()
     )
+    
+    # if tickets_player is None:
+    #         abort(404, f"Post id {id} or player {player} doesn't exist.")
+    
+    return tickets_player
+        
+@bp.route("/partida<int:id>/jugador<int:player>/create", methods=("GET", "POST"))
+@login_required
 
-    if post is None:
-        abort(404, f"Post id {id} doesn't exist.")
+def create(id,player):
+    """Create a new ticket for the current user."""
+    def get_ticket_random (numbers_of_tickets,tickets=[]):
+        cantidad_de_tickets_actuales=len(tickets)
+        total_tickets=cantidad_de_tickets_actuales+numbers_of_tickets
 
-    if check_author and post["author_id"] != g.user["id"]:
-        abort(403)
-
-    return post
-
+        while cantidad_de_tickets_actuales<total_tickets:
+            all_tickets = [('Madrid',    'Lisboa', 3), 
+                                ('Madrid',         'Barcelona',        2), 
+                                ('Pamplona', 'París',      4), 
+                                ('Lisboa',       'Cadiz',        6)]
+           
+            max_value=len(all_tickets)-1
+            random_number=random.randrange(0,max_value,1)
+            random_ticket=all_tickets[random_number]
+            if random_ticket not in tickets:
+                tickets.append(random_ticket)
+                cantidad_de_tickets_actuales=len(tickets)
+        return tickets
+    
+    # tickets_player=get_tickets_players(id,player)
+    tickets=[]
+    if len(tickets):
+        tickets=(get_ticket_random(2))
+    else:
+        tickets=(get_ticket_random(1,tickets))
+            
+    return render_template("game/create_ticket.html", id=id,player=player,tickets=tickets)
+ #el segundo ticket lo coje de forma muuuuy rara, por lo que arreglar eso

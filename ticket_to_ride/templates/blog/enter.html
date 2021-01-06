@@ -5,19 +5,19 @@
 {% endblock %}
 
 {% block content %}
-<form action="{{ url_for('game.test', id=post['id'],player='1') }}" method="post">
+<form action="{{ url_for('game.player_ticket_menu', id=post['id'],player='1') }}" method="post">
   <input class="blue" type="submit" value="AZUL">
 </form>
-<form action="{{ url_for('game.test', id=post['id'],player='2') }}" method="post">
+<form action="{{ url_for('game.player_ticket_menu', id=post['id'],player='2') }}" method="post">
   <input class="red" type="submit" value="ROJO">
 </form>
-<form action="{{ url_for('game.test', id=post['id'],player='3') }}" method="post">
+<form action="{{ url_for('game.player_ticket_menu', id=post['id'],player='3') }}" method="post">
   <input class="green" type="submit" value="VERDE">
 </form>
-<form action="{{ url_for('game.test', id=post['id'],player='4') }}" method="post">
+<form action="{{ url_for('game.player_ticket_menu', id=post['id'],player='4') }}" method="post">
   <input class="yellow" type="submit" value="AMARILLO">
 </form>
-<form action="{{ url_for('game.test', id=post['id'],player='5') }}" method="post">
+<form action="{{ url_for('game.player_ticket_menu', id=post['id'],player='5') }}" method="post">
   <input class="black" type="submit" value="NEGRO">
 </form>
 
