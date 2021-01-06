@@ -75,12 +75,20 @@ def create(id,player):
                 cantidad_de_tickets_actuales=len(tickets)
         return tickets
     
-    # tickets_player=get_tickets_players(id,player)
+    tickets_player=get_tickets_players(id,player)
     tickets=[]
     if len(tickets)==0:
         tickets=(get_ticket_random(4))
     else:
         tickets=(get_ticket_random(1,tickets))
             
+    if request.method == 'POST':
+        if request.form['submit_button'] == 'Yeca':
+            print("hello")
+        elif request.form['submit_button'] == 'Ni de coña"':
+            pass # do something else
+        else:
+            pass # unknown
+        
     return render_template("game/create_ticket.html", id=id,player=player,tickets=tickets)
- #el segundo ticket lo coje de forma muuuuy rara, por lo que arreglar eso
+

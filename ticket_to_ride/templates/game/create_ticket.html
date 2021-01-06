@@ -12,10 +12,12 @@
     <header>
       
         <h1>destino {{loop.index}} </h1>
+        
         <div class="about">Desde {{ ticket[0] }} hasta {{ ticket[1] }} por {{ticket[2]}} puntos
-          <input type="submit" class="Accept" name="Accept" value="Yeca">
-          <input type="submit" class="Remove" name="Remove" value="Ni de coña"> </div>
-
+          <form method ="post">
+          <input type="submit" class="Accept" name="submit_button" value="Yeca" >
+          <input type="submit" class="Remove" name="submit_button" value="Ni de coña"> </div>
+        </form> 
     </header>
   </article>
   {% endfor %}
