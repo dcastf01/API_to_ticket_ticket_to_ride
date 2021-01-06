@@ -59,15 +59,15 @@ def create(id,player):
     """Create a new ticket for the current user."""
     def get_ticket_random (numbers_of_tickets,tickets=[]):
         cantidad_de_tickets_actuales=len(tickets)
-        total_tickets=cantidad_de_tickets_actuales+numbers_of_tickets
+        total_tickets_al_finalizar=cantidad_de_tickets_actuales+numbers_of_tickets
 
-        while cantidad_de_tickets_actuales<total_tickets:
+        while cantidad_de_tickets_actuales<total_tickets_al_finalizar:
             all_tickets = [('Madrid',    'Lisboa', 3), 
                                 ('Madrid',         'Barcelona',        2), 
                                 ('Pamplona', 'París',      4), 
                                 ('Lisboa',       'Cadiz',        6)]
            
-            max_value=len(all_tickets)-1
+            max_value=len(all_tickets)
             random_number=random.randrange(0,max_value,1)
             random_ticket=all_tickets[random_number]
             if random_ticket not in tickets:
@@ -77,8 +77,8 @@ def create(id,player):
     
     # tickets_player=get_tickets_players(id,player)
     tickets=[]
-    if len(tickets):
-        tickets=(get_ticket_random(2))
+    if len(tickets)==0:
+        tickets=(get_ticket_random(4))
     else:
         tickets=(get_ticket_random(1,tickets))
             
