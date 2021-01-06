@@ -127,8 +127,24 @@ nav ul li a, nav ul li span, header .action {
 input.danger {
   color: #cc2f2e;
 }
+input.blue {
+  color: #2e4bcc;
+}
+input.red {
+  color: #cc2f2e;
+}
+input.green {
+  color: #2ecc36;
+}
+input.black {
+  color: #000000;
+}
+input.yellow {
+  color: #ccbc2e;
+}
 
 input[type=submit] {
   align-self: start;
   min-width: 10em;
 }
+

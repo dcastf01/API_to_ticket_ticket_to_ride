@@ -5,17 +5,20 @@
 {% endblock %}
 
 {% block content %}
+<form action="{{ url_for('game.test', id=post['id'],player='1') }}" method="post">
+  <input class="blue" type="submit" value="AZUL">
+</form>
+<form action="{{ url_for('game.test', id=post['id'],player='2') }}" method="post">
+  <input class="red" type="submit" value="ROJO">
+</form>
+<form action="{{ url_for('game.test', id=post['id'],player='3') }}" method="post">
+  <input class="green" type="submit" value="VERDE">
+</form>
+<form action="{{ url_for('game.test', id=post['id'],player='4') }}" method="post">
+  <input class="yellow" type="submit" value="AMARILLO">
+</form>
+<form action="{{ url_for('game.test', id=post['id'],player='5') }}" method="post">
+  <input class="black" type="submit" value="NEGRO">
+</form>
 
-<form method="post">
-  <label for="title">Title</label>
-  <input name="title" id="title" value="{{ request.form['title'] or post['title'] }}" required>
-  <label for="nplayers">nplayers</label>
-  <input type="number" name="nplayers" min="2" max="5" id="nplayers"
-    value="{{ request.form['nplayers'] or post['nplayers'] }}"" required>
-<input type=" submit" value="Save">
-</form>
-<hr>
-<form action="{{ url_for('game.test', id=post['id'],player=post['id']) }}" method="post">
-  <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure? fiate');">
-</form>
 {% endblock %}
