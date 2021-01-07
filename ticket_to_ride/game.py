@@ -51,7 +51,17 @@ def get_tickets_players(id,player)  :
     #         abort(404, f"Post id {id} or player {player} doesn't exist.")
     
     return tickets_player
-        
+
+def save_ticket(id_game,player,ticket):
+    db=get_db()
+    db.execute(
+                "INSERT INTO post (title, nplayers, author_id) VALUES (?, ?, ?)",
+                (title, nplayers, g.user["id"]),
+            )
+    db.commit()
+    
+    
+            
 @bp.route("/partida<int:id>/jugador<int:player>/create", methods=("GET", "POST"))
 @login_required
 
@@ -83,8 +93,10 @@ def create(id,player):
         tickets=(get_ticket_random(1,tickets))
             
     if request.method == 'POST':
+        as_dict = request.form.getlist('tickets')
         if request.form['submit_button'] == 'Yeca':
-            print("hello")
+            ticket=request.form.getlist("submit_button")
+            save_ticket(id,player,ticket)
         elif request.form['submit_button'] == 'Ni de coña"':
             pass # do something else
         else:

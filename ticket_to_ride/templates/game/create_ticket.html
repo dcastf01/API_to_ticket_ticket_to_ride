@@ -7,19 +7,35 @@
 
 
 {% block content %}
-  {% for ticket in tickets     %}
+
   <article class="ticket">
     <header>
       
-        <h1>destino {{loop.index}} </h1>
+        <!-- <h1>destino  </h1> -->
         
-        <div class="about">Desde {{ ticket[0] }} hasta {{ ticket[1] }} por {{ticket[2]}} puntos
-          <form method ="post">
-          <input type="submit" class="Accept" name="submit_button" value="Yeca" >
-          <input type="submit" class="Remove" name="submit_button" value="Ni de coña"> </div>
-        </form> 
+  
+            <!-- {% for ticket in tickets   %}
+            <input type=checkbox name=ticket value="{{ ticket }}"> Desde {{ ticket[0] }} hasta {{ ticket[1] }} por {{ticket[2]}} puntos <br/>
+            <label>{{ticket}}</label>
+            {% endfor %} -->
+          <!-- <input type="hidden" id="ticket" value="{{ ticket }}" > -->
+       <!-- <input type="submit" class="Accept" name="submit_button" value="Yeca" > -->
+          <!-- <input type="submit" class="Remove" name="submit_button" value="Ni de coña"> </div> --> 
+        
+      
+<form method ="post"> 
+  <div class="form-group">
+    <div>
+      <select id="myform" name='tickets' multiple class="form-control"> // addition here
+        {% for ticket in tickets   %}  
+        <option> {{ticket}} </option>
+        {% endfor %}
+         
+      </select>
+    </div>
+  </div>
+  <input type="submit" class="Accept" name="submit_button" value="Yeca"  onclick="return confirm ('Y con esto piensas ganar?)">
+</form> 
     </header>
-  </article>
-  {% endfor %}
 
 {% endblock %}
