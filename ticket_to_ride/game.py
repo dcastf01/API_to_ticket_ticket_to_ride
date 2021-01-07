@@ -22,7 +22,6 @@ bp = Blueprint("game", __name__)
 def player_ticket_menu(id,player):
     """Show all the tickets, most recent first."""
     
-    # tickets_player=get_tickets_players(id,player)
     
     db = get_db()
     tickets_player = db.execute(
@@ -32,7 +31,7 @@ def player_ticket_menu(id,player):
         " ORDER BY created DESC",
         (id,player)
     ).fetchall()
-    keys=tickets_player[0].keys()
+    # keys=tickets_player[0].keys()
     return render_template("game/tickets_jugador.html", tickets_player=tickets_player,id=id,player=player)
 
 def get_tickets_players(id,player)  :
@@ -42,50 +41,51 @@ def get_tickets_players(id,player)  :
             .execute(
                 "SELECT p.id, origen, destino,puntos, created,game_id, author_id, username"
                 " FROM player_tickets p JOIN user u ON p.author_id = u.id"
-                " WHERE p.id = ? AND p.player_id= ?" ,
+                " WHERE p.game_id = ? AND p.player_id= ?" ,
                 (id,player),
             )
-            .fetchone()
+            .fetchall()
     )
     
-    # if tickets_player is None:
-    #         abort(404, f"Post id {id} or player {player} doesn't exist.")
-    
+   
     return tickets_player
-
-
-    
-    
-            
+       
 @bp.route("/partida<int:id>/jugador<int:player>/create", methods=("GET", "POST"))
 @login_required
 
 def create(id,player):
     """Create a new ticket for the current user."""
-    def get_ticket_random (numbers_of_tickets,tickets=[]):
+    def get_ticket_random (numbers_of_tickets,tickets_old=[]):
         cantidad_de_tickets_actuales=len(tickets)
         total_tickets_al_finalizar=cantidad_de_tickets_actuales+numbers_of_tickets
-
+        new_tickets=[]
         while cantidad_de_tickets_actuales<total_tickets_al_finalizar:
-            all_tickets = [('Madrid',    'Lisboa', 3), 
+            all_tickets =   [   ('Madrid',    'Lisboa', 3), 
                                 ('Madrid',         'Barcelona',        2), 
                                 ('Pamplona', 'París',      4), 
-                                ('Lisboa',       'Cadiz',        6)]
+                                ('Lisboa',       'Cadiz',        6),
+                                ('Paris','Dieppe',1),
+                                ('Madrid','Pamplona',3)
+                            ]
            
-            max_value=len(all_tickets)
-            random_number=random.randrange(0,max_value,1)
+            max_value_random_number=len(all_tickets)
+            random_number=random.randrange(0,max_value_random_number,1)
             random_ticket=all_tickets[random_number]
-            if random_ticket not in tickets:
-                tickets.append(random_ticket)
-                cantidad_de_tickets_actuales=len(tickets)
-        return tickets
+            if random_ticket not in tickets_old and random_ticket not in new_tickets:
+                new_tickets.append(random_ticket)
+                cantidad_de_tickets_actuales=len(tickets)+len(new_tickets)
+        return new_tickets
     
     tickets_player=get_tickets_players(id,player)
     tickets=[]
+    for ticket in tickets_player:
+        keys=ticket.keys()
+        ticket=(ticket["origen"],ticket["destino"],ticket["puntos"])
+        tickets.append(ticket)
     if len(tickets)==0:
         tickets=(get_ticket_random(4))
     else:
-        tickets=(get_ticket_random(1,tickets))
+        tickets=(get_ticket_random(3,tickets))
             
 
     return render_template("game/create_ticket.html", id=id,player=player,tickets=tickets)
