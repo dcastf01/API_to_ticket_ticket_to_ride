@@ -6,6 +6,7 @@ from flask import render_template
 from flask import request
 from flask import url_for
 from werkzeug.exceptions import abort
+from ast import literal_eval as make_tuple
 
 from ticket_to_ride.auth import login_required
 from ticket_to_ride.db import get_db
@@ -27,11 +28,11 @@ def player_ticket_menu(id,player):
     tickets_player = db.execute(
         "SELECT p.id, origen, destino,puntos, created,game_id, author_id, username"
         " FROM player_tickets p JOIN user u ON p.author_id = u.id"
-        " WHERE p.id = ? AND p.player_id= ?"
+        " WHERE p.game_id = ? AND p.player_id= ?"
         " ORDER BY created DESC",
         (id,player)
     ).fetchall()
-    
+    keys=tickets_player[0].keys()
     return render_template("game/tickets_jugador.html", tickets_player=tickets_player,id=id,player=player)
 
 def get_tickets_players(id,player)  :
@@ -52,13 +53,7 @@ def get_tickets_players(id,player)  :
     
     return tickets_player
 
-def save_ticket(id_game,player,ticket):
-    db=get_db()
-    db.execute(
-                "INSERT INTO post (title, nplayers, author_id) VALUES (?, ?, ?)",
-                (title, nplayers, g.user["id"]),
-            )
-    db.commit()
+
     
     
             
@@ -92,15 +87,29 @@ def create(id,player):
     else:
         tickets=(get_ticket_random(1,tickets))
             
-    if request.method == 'POST':
-        as_dict = request.form.getlist('tickets')
-        if request.form['submit_button'] == 'Yeca':
-            ticket=request.form.getlist("submit_button")
-            save_ticket(id,player,ticket)
-        elif request.form['submit_button'] == 'Ni de coña"':
-            pass # do something else
-        else:
-            pass # unknown
-        
+
     return render_template("game/create_ticket.html", id=id,player=player,tickets=tickets)
 
+@bp.route("/partida<int:id>/jugador<int:player>/save", methods=("GET", "POST"))
+@login_required
+def save_tickets(id,player):
+    def save_ticket(game_id,player_id,ticket):
+             
+        origen,destino,puntos=make_tuple(ticket)
+      
+        db=get_db()
+        db.execute(
+                    "INSERT INTO player_tickets ( game_id,player_id, author_id,origen,destino,puntos) VALUES (?, ?,?, ?,?,?)",
+                    (game_id, player_id,g.user["id"], origen,destino,puntos),
+                )
+        db.commit()
+     
+    if request.method == 'POST':
+        
+        if request.form['submit_button'] == 'Yeca':
+            tickets = request.form.getlist('tickets')
+            for ticket in tickets:
+                
+                save_ticket(id,player,ticket)
+    
+    return redirect(url_for("game.player_ticket_menu",id=id,player=player))

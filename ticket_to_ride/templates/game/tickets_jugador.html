@@ -6,12 +6,28 @@
   {% if g.user %}
     <a class="action" href="{{ url_for('game.create', id=id,player=player) }}">More tickets</a>
   {% endif %}
+
 {% endblock %}
 
 
 {% block content %}
   {% for ticket_player in tickets_player     %}
-
+<!-- <article class="post">
+      <header>
+        <div>
+          <h1>{{ ticket_player['destino'] }}</h1>
+          <div class="about">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
+        </div>
+        {% if g.user['id'] == post['author_id'] %}
+          <a class="action" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
+        {% endif %}
+        <a class="action" href="{{ url_for('blog.enter' , id=post['id'])}}">Entrar</a>
+      </header>
+      <p class="nplayers">{{ post['nplayers'] }}</p>
+    </article> -->
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
   {% endfor %}
 {% endblock %}
 

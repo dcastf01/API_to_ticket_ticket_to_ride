@@ -11,19 +11,8 @@
   <article class="ticket">
     <header>
       
-        <!-- <h1>destino  </h1> -->
-        
-  
-            <!-- {% for ticket in tickets   %}
-            <input type=checkbox name=ticket value="{{ ticket }}"> Desde {{ ticket[0] }} hasta {{ ticket[1] }} por {{ticket[2]}} puntos <br/>
-            <label>{{ticket}}</label>
-            {% endfor %} -->
-          <!-- <input type="hidden" id="ticket" value="{{ ticket }}" > -->
-       <!-- <input type="submit" class="Accept" name="submit_button" value="Yeca" > -->
-          <!-- <input type="submit" class="Remove" name="submit_button" value="Ni de coña"> </div> --> 
-        
       
-<form method ="post"> 
+<form action="{{ url_for('game.save_tickets',id=id,player=player) }}" method ="post"> 
   <div class="form-group">
     <div>
       <select id="myform" name='tickets' multiple class="form-control"> // addition here
