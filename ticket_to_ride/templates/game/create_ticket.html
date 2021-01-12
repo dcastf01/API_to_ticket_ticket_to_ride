@@ -2,6 +2,8 @@
 
 {% block header %}
   <h1>{% block title %}Nuevos tickets{% endblock %}</h1>
+  <a class="action" href="{{ url_for('game.player_ticket_menu', id=id,player=player) }}">Menú de tickets</a>
+
 {% endblock %}
 
 

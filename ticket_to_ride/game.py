@@ -12,12 +12,12 @@ from ticket_to_ride.auth import login_required
 from ticket_to_ride.db import get_db
 import logging
 import random
-
+from ticket_to_ride.static.routes import all_routes
 bp = Blueprint("game", __name__)
 
 
 @bp.route("/partida<int:id>/jugador<int:player>/", methods=("GET", "POST"))
-@login_required
+
 
 def player_ticket_menu(id,player):
     """Show all the tickets, most recent first."""
@@ -51,7 +51,6 @@ def get_tickets_players(id,player)  :
     return tickets_player
        
 @bp.route("/partida<int:id>/jugador<int:player>/create", methods=("GET", "POST"))
-@login_required
 
 def create(id,player):
     """Create a new ticket for the current user."""
@@ -60,13 +59,7 @@ def create(id,player):
         total_tickets_al_finalizar=cantidad_de_tickets_actuales+numbers_of_tickets
         new_tickets=[]
         while cantidad_de_tickets_actuales<total_tickets_al_finalizar:
-            all_tickets =   [   ('Madrid',    'Lisboa', 3), 
-                                ('Madrid',         'Barcelona',        2), 
-                                ('Pamplona', 'París',      4), 
-                                ('Lisboa',       'Cadiz',        6),
-                                ('Paris','Dieppe',1),
-                                ('Madrid','Pamplona',3)
-                            ]
+            all_tickets =   all_routes
            
             max_value_random_number=len(all_tickets)
             random_number=random.randrange(0,max_value_random_number,1)
@@ -91,7 +84,6 @@ def create(id,player):
     return render_template("game/create_ticket.html", id=id,player=player,tickets=tickets)
 
 @bp.route("/partida<int:id>/jugador<int:player>/save", methods=("GET", "POST"))
-@login_required
 def save_tickets(id,player):
     def save_ticket(game_id,player_id,ticket):
              
